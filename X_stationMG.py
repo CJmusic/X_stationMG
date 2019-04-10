@@ -11,6 +11,7 @@ from _Framework.ControlSurface import ControlSurface
 from _Framework.TransportComponent import TransportComponent
 from _Framework.MixerComponent import MixerComponent
 from _Framework.DeviceComponent import DeviceComponent
+from _Framework.SessionComponent import SessionComponent
 from _Framework.EncoderElement import EncoderElement
 from _Framework.SliderElement import SliderElement
 from _Framework.ButtonElement import ButtonElement
@@ -50,7 +51,14 @@ REC  = 116
 
 PADS = [[40, 41, 42, 43, 48, 49, 50, 51], 
         [36, 37, 38, 39, 44, 45, 46, 47]] # this is the midi note values of the grid of 16 buttons arranged by row/column  
-SCENES = [108, 109] # midi controller values for the two scene launch buttons 
+
+CLIP_BUTTONS = [97,98,99,100,101,102,103,104] 
+# SCENE_LAUNCH = []
+STOP_ALL = 105 
+SCENE_UP = 106 
+SCENE_DOWN = 107
+
+
 
 class X_stationMG(ControlSurface):
     def __init__(self, c_instance):
@@ -59,7 +67,7 @@ class X_stationMG(ControlSurface):
         self._suppress_send_midi = True
         self._suppress_session_highlight = True
         self._control_is_with_automap = False
-
+        self._device_selection_follows_track_selection = True
         self._suggested_input_port = 'LK Mini MIDI'
         self._suggested_output_port = 'LK Mini MIDI'
         with self.component_guard():
@@ -132,6 +140,22 @@ class X_stationMG(ControlSurface):
         self._session_navigation.set_next_track_button(ButtonElement(False,MIDI_CC_TYPE,CHANNEL, FORWARD))
         self._session_navigation.set_prev_track_button(ButtonElement(False,MIDI_CC_TYPE,CHANNEL, REVERSE))
 
+
+    ## SESSION AND SCENE CONTROL
+    
+        self._session = SessionComponent(8, 0)
+        self._session.selected_scene().name = 'Selected_Scene'
+        # self._session.selected_scene().set_launch_button(ButtonElement(False,MIDI_CC_TYPE,CHANNEL, None))
+        self._session.set_stop_all_clips_button(ButtonElement(False,MIDI_CC_TYPE,CHANNEL, STOP_ALL))
+        clip_launch_buttons = []
+        for i in xrange(8):
+                clip_launch_buttons.append(ButtonElement(False,MIDI_CC_TYPE, CHANNEL, CLIP_BUTTONS[i]))
+                clip_slot = self._session.selected_scene().clip_slot(i)
+                clip_slot.set_launch_button(clip_launch_buttons[-1])
+    
+    
+    
+    
     def disconnect(self):
         ControlSurface.disconnect(self)
                                                                               
