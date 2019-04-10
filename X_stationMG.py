@@ -70,6 +70,8 @@ class X_stationMG(ControlSurface):
         transport = TransportComponent()
         mixer.set_track_offset(0)
         
+        master = mixer.master_strip()
+        master.set_volume_control(SliderElement(MIDI_CC_TYPE, CHANNEL, MASTER_FADER))
 
         for i in xrange(len(FADERS)): #set the functions of the knobs
             volume_knob = SliderElement(MIDI_CC_TYPE, CHANNEL, FADERS[i])
@@ -96,6 +98,13 @@ class X_stationMG(ControlSurface):
         transport.set_stop_button(ButtonElement(False, MIDI_CC_TYPE, CHANNEL, STOP))                 
         transport.set_play_button(ButtonElement(False, MIDI_CC_TYPE, CHANNEL, PLAY))
           # code left above so you cant replace either button with a play button
+
+        transport.set_tempo_control(SliderElement(MIDI_CC_TYPE, CHANNEL, TEMPO_KNOB))
+        transport.set_metronome_button(ButtonElement(False,MIDI_CC_TYPE,CHANNEL, METRONOME))
+        transport.set_tap_tempo_button(ButtonElement(False,MIDI_CC_TYPE,CHANNEL,TAP_TEMPO))
+
+
+
         self._device = DeviceComponent()
         device_param_controls = []
         for i in xrange(len(DEVICE_KNOBS)):
