@@ -143,6 +143,9 @@ class X_stationMG(ControlSurface):
 
     ## SESSION AND SCENE CONTROL
     
+        self._session_navigation.set_next_scene_button(ButtonElement(False,MIDI_CC_TYPE, CHANNEL, SCENE_UP))
+        self._session_navigation.set_prev_scene_button(ButtonElement(False,MIDI_CC_TYPE, CHANNEL, SCENE_DOWN))
+
         self._session = SessionComponent(8, 0)
         self._session.selected_scene().name = 'Selected_Scene'
         # self._session.selected_scene().set_launch_button(ButtonElement(False,MIDI_CC_TYPE,CHANNEL, None))
