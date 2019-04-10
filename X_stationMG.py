@@ -15,6 +15,7 @@ from _Framework.EncoderElement import EncoderElement
 from _Framework.SliderElement import SliderElement
 from _Framework.ButtonElement import ButtonElement
 
+from DeviceNavComponent import DeviceNavComponent
 from Launchkey.Launchkey import make_encoder
 
 
@@ -25,6 +26,17 @@ MIDI_NOTE_TYPE = 0
 MIDI_CC_TYPE = 1
 
 DEVICE_KNOBS = [7,8,9,10,11,12,13,14]
+DEVICE_ON = 15
+DEVICE_LOCK = 16 
+DEVICE_BANK_UP = 17
+DEVICE_BANK_DOWN = 18
+DEVICE_NEXT = 19
+DEVICE_PREV = 20
+
+TAP_TEMPO = 108
+METRONOME = 109
+TEMPO_KNOB = 110
+
 
 FADERS = [49,50,51,52,53,54,55,56] # these are the midi control values for the knobs of the LK Mini 
 MASTER_FADER = 47
@@ -89,16 +101,15 @@ class X_stationMG(ControlSurface):
         for i in xrange(len(DEVICE_KNOBS)):
             device_param_controls.append(SliderElement(MIDI_CC_TYPE, CHANNEL, DEVICE_KNOBS[i]))
         self._device.set_parameter_controls(device_param_controls)
-        # self._device.set_on_off_button(ButtonElement(True, MIDI_CC_TYPE, CHANNEL_FX, DEVICE_ON))
+        self._device.set_on_off_button(ButtonElement(True, MIDI_CC_TYPE, CHANNEL, DEVICE_ON))
         # self._device.set_lock_button(ButtonElement(True, MIDI_CC_TYPE, CHANNEL_FX, DEVICE_LOCK))
-        # up_bank_button = ButtonElement(True, MIDI_CC_TYPE, CHANNEL_FX, DEVICE_BANK_UP)
-        # down_bank_button = ButtonElement(True, MIDI_CC_TYPE, CHANNEL_FX, DEVICE_BANK_DOWN)
-        # self._device.set_bank_buttons(down_bank_button, up_bank_button)
-        # self.set_device_component(self._device)
-        # self._device_nav = DeviceNavComponent()
-        # self._device_nav.set_device_nav_buttons(ButtonElement(True, MIDI_CC_TYPE, CHANNEL_FX, PREVIOUS_DEVICE),ButtonElement(True, MIDI_CC_TYPE, CHANNEL_FX, NEXT_DEVICE))
-        # self._device.set_bank_prev_button(down_bank_button)
-        # self._device.set_bank_next_button(up_bank_button)
+        up_bank_button = ButtonElement(True, MIDI_CC_TYPE, CHANNEL, DEVICE_BANK_UP)
+        down_bank_button = ButtonElement(True, MIDI_CC_TYPE, CHANNEL, DEVICE_BANK_DOWN)
+        self.set_device_component(self._device)
+        self._device_nav = DeviceNavComponent()
+        self._device_nav.set_device_nav_buttons(ButtonElement(True, MIDI_CC_TYPE, CHANNEL, DEVICE_PREV),ButtonElement(True, MIDI_CC_TYPE, CHANNEL, DEVICE_NEXT))
+        self._device.set_bank_prev_button(down_bank_button)
+        self._device.set_bank_next_button(up_bank_button)
 
 
     def disconnect(self):
