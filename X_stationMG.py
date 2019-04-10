@@ -15,6 +15,7 @@ from _Framework.EncoderElement import EncoderElement
 from _Framework.SliderElement import SliderElement
 from _Framework.ButtonElement import ButtonElement
 
+from SessionNavigationComponent import SessionNavigationComponent
 from DeviceNavComponent import DeviceNavComponent
 from Launchkey.Launchkey import make_encoder
 
@@ -120,6 +121,16 @@ class X_stationMG(ControlSurface):
         self._device.set_bank_prev_button(down_bank_button)
         self._device.set_bank_next_button(up_bank_button)
 
+
+    ## NEXT AND PREVIOUS TRACK + ARMING 
+
+        # self._control_factory = control_factory
+        self._session_navigation = SessionNavigationComponent(name='Session_Navigation')
+        # self._next_track_button = self._control_factory.create_next_track_button()
+        # self._prev_track_button = self._control_factory.create_prev_track_button()
+        self._session_navigation = SessionNavigationComponent(name='Session_Navigation')
+        self._session_navigation.set_next_track_button(ButtonElement(False,MIDI_CC_TYPE,CHANNEL, FORWARD))
+        self._session_navigation.set_prev_track_button(ButtonElement(False,MIDI_CC_TYPE,CHANNEL, REVERSE))
 
     def disconnect(self):
         ControlSurface.disconnect(self)
